@@ -18,18 +18,18 @@ This solution deploys an end-to-end MongoDB replica set:
 
 All steps are fully automated using two scripts:
 
-* **Script 1 → EC2 Launch + MongoDB Install + Basic Config**
-* **Script 2 → Keyfile Auth Setup + Replica Set Initiation**
+* **installation_configuration.sh → EC2 Launch + MongoDB Install + Basic Config**
+* **initialization.sh → Keyfile Auth Setup + Replica Set Initiation**
 
 ---
 
 ## **Files Included**
 
-### **1. `script1.sh`**
+### **1. `installation_configuration.sh`**
 
 Automates EC2 instance creation and initial MongoDB setup.
 
-### **2. `script2.sh`**
+### **2. `initialization.sh`**
 
 Configures keyfile-based authentication and initiates replica set.
 
@@ -53,16 +53,16 @@ aws configure
 4. Scripts must be executable:
 
 ```
-chmod +x script1.sh script2.sh
+chmod +x installation_configuration.sh initialization.sh
 ```
 
 ---
 
-## **How Script 1 Works**
+## **How installation_configuration.sh Works**
 
-Script 1 performs the following:
+installation_configuration.sh performs the following:
 
-### ✔ Launches EC2 Instances
+#### Launches EC2 Instances
 
 Prompts for:
 
@@ -74,7 +74,7 @@ Prompts for:
 
 Each server is tagged with a custom name.
 
-### ✔ Captures and stores Private IPs
+## Captures and stores Private IPs
 
 All private IPs are saved in:
 
@@ -82,7 +82,7 @@ All private IPs are saved in:
 /tmp/mongo_ips.txt
 ```
 
-### ✔ Installs MongoDB 8.x on all servers
+#### Installs MongoDB 8.x on all servers
 
 Steps include:
 
@@ -90,14 +90,14 @@ Steps include:
 * Installing `mongodb-org`
 * Starting + enabling service
 
-### ✔ Updates MongoDB configuration
+#### Updates MongoDB configuration
 
 * Custom port **27717**
 * Bind to **0.0.0.0**
 * Enable replica set section
 * Prepare commented security fields
 
-### ✔ Updates /etc/hosts mapping
+#### Updates /etc/hosts mapping
 
 Adds entries like:
 
@@ -109,11 +109,11 @@ Adds entries like:
 
 ---
 
-## **How Script 2 Works**
+## **How initialization.sh Works**
 
-Script 2 handles authentication and replica set initialization.
+initialization.sh handles authentication and replica set initialization.
 
-### ✔ Generates keyfile on first node
+#### Generates keyfile on first node
 
 Creates keyfile at:
 
@@ -128,11 +128,11 @@ chmod 400
 chown mongodb:mongodb
 ```
 
-### ✔ Distributes keyfile to all other nodes
+#### Distributes keyfile to all other nodes
 
 Copies securely using scp.
 
-### ✔ Enables Security + Authorization
+#### Enables Security + Authorization
 
 Updates:
 
@@ -142,11 +142,11 @@ security:
   authorization: enabled
 ```
 
-### ✔ Restarts MongoDB on all nodes
+#### Restarts MongoDB on all nodes
 
 Ensures secure communication.
 
-### ✔ Initiates Replica Set Automatically
+#### Initiates Replica Set Automatically
 
 Builds members list based on IP file:
 
@@ -154,7 +154,7 @@ Builds members list based on IP file:
 rs.initiate({ _id: 'repl', members: [...] })
 ```
 
-### ✔ Prints Final Members List
+#### Prints Final Members List
 
 ```
 Replica set initiated successfully.
@@ -171,7 +171,7 @@ Members:
 ### **Step 1: Launch EC2 + Install MongoDB**
 
 ```
-./script1.sh
+./installation_configuration.sh
 ```
 
 Follow prompts.
@@ -181,7 +181,7 @@ Follow prompts.
 Run on **any one** MongoDB node:
 
 ```
-./script2.sh
+./initialization.sh
 ```
 
 ---
@@ -189,8 +189,8 @@ Run on **any one** MongoDB node:
 ## **Directory Structure**
 
 ```
-├── script1.sh
-├── script2.sh
+├── installation_configuration.sh
+├── initialization.sh
 └── README.md
 ```
 
@@ -198,7 +198,7 @@ Run on **any one** MongoDB node:
 
 ## **Notes & Best Practices**
 
-* Script 2 must run only once.
+* initialization.sh must run only once.
 * To add more nodes later, update IP file and rerun key distribution manually.
 * Ensure EC2 instances have IAM roles or AWS CLI credentials when running script1.
 
@@ -233,15 +233,10 @@ chown mongodb:mongodb keyfile.key
 
 ---
 
-## **License**
-
-MIT License.
-
----
-
 ## **Author**
 
-Pranjal Jha – Database Administrator & Automation Engineer
+Yours,
+Pranjal Jha
 
 ---
 
