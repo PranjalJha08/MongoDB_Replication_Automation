@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-KEY_PATH="/home/ubuntu/DB-Team-KeyPair.pem"
+read -p "Enter PEM Key File Path: " KEY_PATH
 IP_FILE="/tmp/mongo_ips.txt"
 KEYFILE_LOCAL="/tmp/keyfile.key"
 LOCAL_IP=$(hostname -I | awk '{print $1}')
