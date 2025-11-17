@@ -1,4 +1,4 @@
-# MongoDB Automated 3-Node Replica Set Deployment (MongoDB 8.x)
+# MongoDB Automated N-Nodes Replica Set Deployment (MongoDB 8.x)
 
 This repository contains two bash scripts that fully automate the deployment of MongoDB 8.x replica set nodes on AWS EC2 instances. The setup includes EC2 provisioning, MongoDB installation, configuration updates, keyFile-based internal authentication, and automatic replica set initiation.
 
